@@ -31,6 +31,33 @@ module Cas::Services
         service.call
         expect(login_ticket.reload.active).to be_falsey
       end
+
+      it "generates a ticket granting ticket after a successful auth attempt" do
+        lt = login_ticket.name
+        service = Login.new(
+          username: user.email,
+          password: "password",
+          login_ticket_name: lt,
+          service: "https://app.example.com"
+        )
+
+        service.call
+        expect(service.ticket_granting_ticket).to be_a_kind_of(TicketGrantingTicket)
+      end
+
+      it "generates a service ticket after a successful auth attempt" do
+        lt = login_ticket.name
+
+        service = Login.new(
+          username: user.email,
+          password: "password",
+          login_ticket_name: lt,
+          service: "https://app.example.com"
+        )
+
+        service.call
+        expect(service.service_ticket).to be_a_kind_of(ServiceTicket)
+      end
     end
   end
 end
@@ -38,7 +65,7 @@ end
 private
 
 def spawn_user(email: "test@example.com", password: "password")
-  service = Cas::Services::Signup.new(email: email, password: email)
+  service = Cas::Services::Signup.new(email: email, password: password)
   service.call
   service.user
 end
