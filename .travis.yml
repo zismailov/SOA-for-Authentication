@@ -6,5 +6,5 @@ before_install: gem install bundler -v 1.16.0.pre.2
 script:
   - export CAS_ENV=test
   - bundle exec rake db:migrate
-  - bundle exec rspec --color --format
+  - bundle exec rspec
   - bundle exec rubocop
