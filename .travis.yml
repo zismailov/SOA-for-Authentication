@@ -5,6 +5,6 @@ rvm:
 before_install: gem install bundler -v 1.16.0.pre.2
 script:
   - export CAS_ENV=test
-  - bundle exec rake db:create db:migrate
-  - bundle exec rspec --color --format documentation --require spec_helper --require
+  - bundle exec rake db:migrate
+  - bundle exec rspec --color --format
   - bundle exec rubocop

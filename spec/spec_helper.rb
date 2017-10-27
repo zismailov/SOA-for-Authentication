@@ -4,6 +4,9 @@ require 'bundler/setup'
 require 'cas'
 require 'active_record'
 require 'database_cleaner'
+require 'support/helpers'
+
+include Helpers
 
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',

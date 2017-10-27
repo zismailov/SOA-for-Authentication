@@ -3,5 +3,5 @@
 require 'active_record'
 
 class ServiceTicket < ActiveRecord::Base
-  # code
+  belongs_to :user
 end
