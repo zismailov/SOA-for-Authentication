@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Cas::Services
   class Signup
     attr_reader :email, :user, :status
 
-    def initialize(email: "test@example.com", password: "blank_password")
+    def initialize(email: 'test@example.com', password: 'blank_password')
       @email = email
       @password = password
     end
@@ -10,9 +12,7 @@ module Cas::Services
     def call
       @user = User.new(email: @email)
       @user.encrypted_password = Digest::SHA1.hexdigest(@password)
-      if @user.save
-        @status = :ok
-      end
+      @status = :ok if @user.save
     end
   end
 end

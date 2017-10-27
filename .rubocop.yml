@@ -1,0 +1,19 @@
+AllCops:
+  TargetRubyVersion: 2.4
+Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Max: 120
+Metrics/AbcSize:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/FirstParameterIndentation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Exclude:
+    - lib/**/*
+    - spec/**/*
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*

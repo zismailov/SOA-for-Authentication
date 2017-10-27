@@ -3,3 +3,8 @@ language: ruby
 rvm:
   - 2.4.1
 before_install: gem install bundler -v 1.16.0.pre.2
+script:
+  - export CAS_ENV=test
+  - bundle exec rake db:create db:migrate
+  - bundle exec rspec --color --format documentation --require spec_helper --require
+  - bundle exec rubocop

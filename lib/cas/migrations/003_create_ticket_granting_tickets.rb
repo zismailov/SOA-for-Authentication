@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTicketGrantingTickets < ActiveRecord::Migration[4.2]
   def change
     create_table :ticket_granting_tickets do |t|
