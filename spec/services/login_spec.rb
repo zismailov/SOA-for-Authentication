@@ -11,6 +11,28 @@ module Cas::Services
       expect(service.ticket).to be_a_kind_of(LoginTicket)
     end
 
+    it "logs a user in based off an existing session" do
+      ticket_granting_ticket = spawn_ticket_granting_ticket(user: user)
+      service = Login.new(
+        ticket_granting_ticket_name: ticket_granting_ticket.name,
+        service: "https://app.example.com"
+      )
+      service.call
+
+      expect(service.status).to eq(:ok)
+    end
+
+    it "provides a service ticket based off a ticket granting cookie auth attempt" do
+      ticket_granting_ticket = spawn_ticket_granting_ticket(user: user)
+      service = Login.new(
+        ticket_granting_ticket_name: ticket_granting_ticket.name,
+        service: "https://app.example.com"
+      )
+      service.call
+
+      expect(service.service_ticket).to be_a_kind_of(ServiceTicket)
+    end
+
     describe "given an existing login ticket" do
       attr_reader :login_ticket
 
@@ -74,4 +96,10 @@ def spawn_login_ticket
   service = Cas::Services::Login.new
   service.call
   service.ticket
+end
+
+def spawn_ticket_granting_ticket(user: nil)
+  tgt = TicketGrantingTicket.new(name: "TGT-random", user: user)
+  tgt.save
+  tgt
 end

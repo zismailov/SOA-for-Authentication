@@ -1,16 +1,17 @@
 module Cas::Services
   class Login
-    attr_reader :ticket, :ticket_granting_ticket, :service_ticket
+    attr_reader :ticket, :ticket_granting_ticket, :service_ticket, :status
 
-    def initialize(username: nil, password: nil, login_ticket_name: nil, service: nil)
+    def initialize(username: nil, password: nil, login_ticket_name: nil, service: nil, ticket_granting_ticket_name: nil)
       @username = username
       @password = password
       @login_ticket_name = login_ticket_name
       @service = service
+      @ticket_granting_ticket_name = ticket_granting_ticket_name
     end
 
     def call
-      if @username.nil?
+      if @username.nil? && @ticket_granting_ticket_name.nil?
         generate_login_ticket
       else
         login
@@ -28,13 +29,24 @@ module Cas::Services
       if valid_auth?
         generate_ticket_granting_ticket
         generate_service_ticket
+
+        @status = :ok
       end
 
-      expire_login_ticket
+      expire_login_ticket if @login_ticket_name
     end
 
     def valid_auth?
-      User.where(email: @username, encrypted_password: Digest::SHA1.hexdigest(@password)).first
+      if @ticket_granting_ticket_name.nil?
+        @user = User.where(email: @username, encrypted_password: Digest::SHA1.hexdigest(@password)).first
+      else
+        @ticket_granting_ticket = TicketGrantingTicket.where(name: @ticket_granting_ticket_name).first
+        if @ticket_granting_ticket
+          @user = @ticket_granting_ticket.user
+        else
+          return false
+        end
+      end
     end
 
     def expire_login_ticket
@@ -42,7 +54,7 @@ module Cas::Services
     end
 
     def generate_ticket_granting_ticket
-      @ticket_granting_ticket = TicketGrantingTicket.new(name: "TGT-" + Digest::SHA1.hexdigest(Time.new.to_s))
+      @ticket_granting_ticket = TicketGrantingTicket.new(name: "TGT-" + Digest::SHA1.hexdigest(Time.new.to_s), user: @user)
       @ticket_granting_ticket.save
     end
 
