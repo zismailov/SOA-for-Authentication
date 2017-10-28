@@ -24,4 +24,15 @@ module Helpers
     st.save
     st
   end
+
+  def perform_login(user: nil, service: nil)
+    ticket = spawn_login_ticket
+    post '/login',
+         username: user.email,
+         password: 'password',
+         lt: ticket.name,
+         service: service
+
+    @service_ticket = CGI.parse(URI.parse(last_response.header['Location']).query)['ticket'][0]
+  end
 end
