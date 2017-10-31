@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require 'builder'
 class App < Sinatra::Base
+  configure :test do
+    set :raise_errors, true
+    set :show_exceptions, true
+  end
+
   get '/' do
     @users = User.all
     erb :index
@@ -52,6 +58,25 @@ class App < Sinatra::Base
     service.call
 
     redirect '/' if service.status == :ok
+  end
+
+  get '/p3/serviceValidate' do
+    service = Cas::Services::Validate.new(
+      params[:service],
+      params[:ticket]
+    )
+    service.call
+
+    if service.status == :ok
+      @user = service.user
+      @success = true
+    else
+      @error = 'INVALID_TICKET'
+      status 201
+    end
+
+    content_type :xml
+    builder :serviceValidate
   end
 
   private

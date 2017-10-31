@@ -57,14 +57,18 @@ module Cas::Services
 
     def generate_ticket_granting_ticket
       @ticket_granting_ticket = TicketGrantingTicket.new(
-                        name: 'TGT-' + Digest::SHA1.hexdigest(Time.new.to_s),
-                        user: @user
+        name: 'TGT-' + Digest::SHA1.hexdigest(Time.new.to_s),
+        user: @user
       )
       @ticket_granting_ticket.save
     end
 
     def generate_service_ticket
-      @service_ticket = ServiceTicket.new(name: 'ST-' + Digest::SHA1.hexdigest(Time.new.to_s))
+      @service_ticket = ServiceTicket.new(
+        name: 'ST-' + Digest::SHA1.hexdigest(Time.new.to_s),
+        service: @service,
+        user: @user
+      )
       @service_ticket.save
     end
   end

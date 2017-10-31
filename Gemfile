@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'activerecord'
+gem 'builder', '~> 2.0'
 gem 'sinatra'
 
 group :development do
