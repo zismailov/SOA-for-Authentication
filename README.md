@@ -12,5 +12,5 @@ Source files on GitHub contain:
 ###### server: cd lib/cas/app
 bundle exec rackup -p 1234
 
-###### client: current_user dir
+###### client: current dir
 bundle exec rackup -p 4567
