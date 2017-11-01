@@ -6,6 +6,9 @@
 /pkg/
 /spec/reports/
 /tmp/
-
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/lib/db/*.sqlite3
+/lib/db/*.sqlite3-journal
 # rspec failure tracking
 .rspec_status

@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-require 'builder'
 class App < Sinatra::Base
-  configure :test do
-    set :raise_errors, true
-    set :show_exceptions, true
-  end
-
   get '/' do
     @users = User.all
     erb :index
