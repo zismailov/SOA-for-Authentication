@@ -7,3 +7,10 @@ Source files on GitHub contain:
 
 1. One Sinatra app for the API that acts as the authentication system;
 2. Another Sinatra demo app that connects to the authentication system.
+
+## Run
+###### server: cd lib/cas/app
+bundle exec rackup -p 1234
+
+###### client: current_user dir
+bundle exec rackup -p 4567
